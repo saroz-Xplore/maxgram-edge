@@ -1,0 +1,16 @@
+{
+  "name": "instagram",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "keywords": [],
+  "author": "Saroj2nd",
+  "license": "ISC",
+  "description": "A simple instagram package",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
