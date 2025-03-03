@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from 'dotenv';
 import { DatabaseConnect } from "./db/index.js";
+import cookieParser from 'cookie-parser'
 import userRoutes from "./routes/user.routes.js";
-const port = 8000
+import postRoutes from "./routes/post.routes.js";
+const port = 3000
 const app = express()
 const hostname =  "127.0.0.1"
 
@@ -17,12 +19,15 @@ DatabaseConnect().then(() => {
     console.log("Error while connecting", err);
 })
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static("public"))
 
 app.use('/api/v1/auth',userRoutes)
+app.use('/api/v1/posts', postRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello everyone\', this is instagram home page')
 })
+
