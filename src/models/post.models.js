@@ -7,9 +7,8 @@ const postSchema = new mongoose.Schema(
         required: true,
         maxLength: 500,
       },
-      imageUrl: {
+      profile_picture: {
         type: String,
-        required: true,
       },
       likes: {
         type: Number,
@@ -24,7 +23,9 @@ const postSchema = new mongoose.Schema(
         ref: 'User', 
       },
     },
-    { timestamps: true }
+    { 
+      timestamps: true ,
+    }
   );
   
 

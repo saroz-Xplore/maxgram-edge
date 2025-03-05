@@ -1,22 +1,25 @@
 import { Post } from "../models/post.models.js";
 import { User } from "../models/user.models.js"; 
-
+import mongoose from "mongoose";
 
 const createPost = async (req, res) => {
     try {
-        const { caption, userId } = req.body;
+        const { caption, userId } = req.body
 
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
        
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
-        const photoUrl = `public/images/${req.file.filename}`
        
+        const photoUrl = `public/images/${req.file.filename}`
+    
         const newPost = await Post.create({
             caption,
-            imageUrl: photoUrl,
+            profile_picture: photoUrl,
             user: userId,
         });
 
@@ -48,14 +51,17 @@ const getAllPosts = async (req, res) => {
 const likePost = async (req, res) => {
     try {
         const { postId } = req.params;
+      
 
-       
+        if (!mongoose.Types.ObjectId.isValid(postId)) {
+            return res.status(400).json({ message: "Invalid post ID" });
+        }
+
         const post = await Post.findById(postId);
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
         }
-
-      
+   
         post.likes += 1;
         await post.save();
 
