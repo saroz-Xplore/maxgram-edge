@@ -43,7 +43,7 @@ const userRegister = async(req, res) => {
             username,
             email,
             password,
-            profile_picture: PhotoUrl   
+            imageUrl: PhotoUrl   
         })
 
         const createdUser = await User.findById(user._id).select("-password")

@@ -6,7 +6,7 @@ import { VerifyToken } from "../middleware/auth.middleware.js";
 const router = Router()
 
 
-router.route('/register').post(upload.single("profile_picture"), userRegister)
+router.route('/register').post(upload.single("imageUrl"), userRegister)
 router.route('/login').post(userLogin)
 router.route('/logout').post(VerifyToken,userLogout)
 
