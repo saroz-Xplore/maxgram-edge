@@ -60,30 +60,30 @@ const getAllPosts = async (req, res) => {
 
 
 const likePost = async (req, res) => {
-    try {
-        const { postId } = req.params;
-      
+  try {
+      const user = req.user?._id; 
 
-        if (!mongoose.Types.ObjectId.isValid(postId)) {
-            return res.status(400).json({ message: "Invalid post ID" });
-        }
+      if (!user) {
+          return res.status(401).json({ message: "Unauthorized" });
+      }
 
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post not found" });
-        }
-   
-        post.likes += 1;
-        await post.save();
+      const post = await Post.findOne({ user }).sort({ createdAt: -1 })
 
-        return res.status(200).json({
-            message: "Post liked successfully",
-            post,
-        });
-    } catch (error) {
-        console.log("Error liking post", error);
-        res.status(500).json({ message: "Something went wrong while liking post" });
-    }
+      if (!post) {
+          return res.status(404).json({ message: "No post found for this user" });
+      }
+
+      post.likes += 1;
+      await post.save();
+
+      return res.status(200).json({
+          message: "Post liked successfully",
+          post,
+      });
+  } catch (error) {
+      console.log("Error liking post", error);
+      res.status(500).json({ message: "Something went wrong while liking post" });
+  }
 };
 
 export { createPost, getAllPosts, likePost };
