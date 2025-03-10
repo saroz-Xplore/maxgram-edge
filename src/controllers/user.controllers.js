@@ -1,4 +1,5 @@
 import { User } from "../models/user.models.js";
+import {uploadingOnCloudinary} from "../utils/cloudinary.js";
 
 const generateAccessToken = async(userId) => {
     try {
@@ -38,23 +39,26 @@ const userRegister = async(req, res) => {
         }
 
         const PhotoUrl = `public/images/${req.file.filename}`
+        const upload = await  uploadingOnCloudinary(PhotoUrl)
 
         const user = await User.create({
             username,
             email,
             password,
-            imageUrl: PhotoUrl   
+            imageUrl:upload.url   
         })
 
         const createdUser = await User.findById(user._id).select("-password")
         if(!createdUser){
             res.status(500).json({
                 message: "Error while registering"
+                
             })
         }
 
         return res.status(200).json({
-            message: "User Registered Successfully"
+            message: "User Registered Successfully",
+            data:createdUser
         })
 
 

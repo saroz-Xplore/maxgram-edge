@@ -4,6 +4,7 @@ import { DatabaseConnect } from "./db/index.js";
 import cookieParser from 'cookie-parser'
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 const port = 3000
 const app = express()
 const hostname =  "127.0.0.1"
@@ -26,6 +27,7 @@ app.use(express.static("public"))
 
 app.use('/api/v1/auth',userRoutes)
 app.use('/api/v1/posts', postRoutes)
+app.use('/api/v1/comment', commentRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello everyone\', this is instagram home page')

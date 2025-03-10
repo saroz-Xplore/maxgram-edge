@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema({
     imageUrl: {
         type:String,
     },
+    followers: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    following: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     refreshToken:{
         type: String
     }
