@@ -62,16 +62,24 @@ const getAllPosts = async (req, res) => {
 const likePost = async (req, res) => {
   try {
       const user = req.user?._id; 
+      const { postId } = req.params;
+
 
       if (!user) {
           return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const post = await Post.findOne({ user }).sort({ createdAt: -1 })
+      const post = await Post.findById(postId).sort({ createdAt: -1 })
 
       if (!post) {
           return res.status(404).json({ message: "No post found for this user" });
       }
+
+      // if (post.likes.includes(user)) {
+      //   return res.status(400).json({message:
+      //     "You already liked this post"
+      //   })
+      // }
 
       post.likes += 1;
       await post.save();

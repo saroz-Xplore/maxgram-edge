@@ -73,9 +73,12 @@ const viewLike = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const liked = await Like.exists({ post: postId, user: userId });
+    const liked = await Like.exists({ postId, userId });
 
-    return res.status(200).json({ liked: !!liked });
+    return res.status(200).json({ message: 'Successfully view all likes',
+      data: liked,
+     })
+    
   } catch (error) {
     console.error("Error checking like status", error);
     res.status(500).json({ message: "Something went wrong while checking like status" });
