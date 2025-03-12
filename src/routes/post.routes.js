@@ -6,7 +6,7 @@ import { upload } from "../middleware/multer.middleware.js";
 const router = Router();
 
 
-router.route('/create').post(VerifyToken, upload.single("imageUrl"), createPost);
+router.route('/create').post(upload.single("imageUrl"), VerifyToken, createPost);
 router.route('/all').get(VerifyToken, getAllPosts);
 router.route('/:postId/like').put(VerifyToken, likePost);
 

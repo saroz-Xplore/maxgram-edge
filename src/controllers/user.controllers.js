@@ -118,6 +118,96 @@ const userLogin = async(req, res) => {
     }
 }
 
+const updatePassword = async(req,res) => {
+    try {
+      const {oldpassword, newpassword} = req.body
+      
+      const user = await User.findById(req.user?._id)
+      if(!user){
+        return res.status(404).json({
+          message: "User not found"
+        })
+      }
+
+      const isPasswordValid = await user.isPasswordCorrect(oldpassword)
+      if(!isPasswordValid){
+        return res.status(400).json({
+          message: "Wrong password"
+        })
+      }
+      user.password = newpassword
+      user.save({validateBeforeSave: false})
+
+      return res.status(200).json({
+        message: "Password Updated Successfully"
+      })
+
+    } catch (error) {
+      console.log("Error while updating password")
+      return res.status(500).json({
+        message: error.message
+      })
+    }
+  }
+
+
+const refreshAccessToken = async (req, res) => {
+    try {
+      const fetchedRefToken = req.cookies?.refreshToken
+      console.log("fetch ref", fetchedRefToken)
+  
+  
+      if (!fetchedRefToken) {
+        return res.status(401).json({
+          message: "Unauthorized request"
+        })
+      }
+  
+      const decodedToken = jwt.verify(fetchedRefToken, process.env.REFRESH_TOKEN_SECRET
+      )
+  
+      const user = await User.findById(decodedToken?._id)
+      if (!user) {
+        return res
+        .status(401)
+        .json({ message: "Invalid refresh token" })
+      }
+      console.log(user)
+      console.log('user ref', user.refreshToken)
+  
+      if (fetchedRefToken !== user?.refreshToken) {
+        return res.status(401).json({
+          message: "Refresh token is expired"
+        })
+      }
+  
+      const options = {
+        httpOnly: true,
+        secure: true
+      }
+  
+      const { accessToken } = await generateAccessToken(user._id)
+      const {refreshToken} = await generateRefreshToken(user._id)
+      res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json({
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          message: "Successfully generated access token"
+        })
+  
+    } catch (error) {
+      console.log("error in access token generation", error)
+      res.status(500).json({
+        error: error
+      })
+    }
+  }
+
+
+
 const userLogout = async(req, res) => {
     try {
         await User.findByIdAndUpdate(
@@ -148,4 +238,4 @@ const userLogout = async(req, res) => {
         })
     }
 }
-export {userRegister, userLogin, userLogout}
+export {userRegister, userLogin, updatePassword, refreshAccessToken, userLogout}
