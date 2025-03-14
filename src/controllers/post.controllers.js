@@ -59,4 +59,36 @@ const getAllPosts = async (req, res) => {
 };
 
 
-export { createPost, getAllPosts};
+const deletePost = async (req, res) => {
+  try {
+      const { postId } = req.params;
+      console.log('post', postId);
+
+      if (!mongoose.Types.ObjectId.isValid(postId)) {
+        return res.status(400).json({ message: "Invalid post ID" });
+  }
+
+      const post = await Post.findById(postId);
+      if (!post) {
+          return res.status(404).json({
+              message: "Post not found"
+          });
+      }
+
+     
+      await Post.findByIdAndDelete(postId);
+
+      return res.status(200).json({
+          message: "Post deleted successfully"
+      });
+  } catch (error) {
+      console.error('Error deleting post:', error);
+      return res.status(500).json({
+          message: "Something went wrong"
+      });
+  }
+};
+
+
+
+export { createPost, getAllPosts, deletePost};
