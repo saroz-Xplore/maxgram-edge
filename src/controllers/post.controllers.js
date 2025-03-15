@@ -58,6 +58,43 @@ const getAllPosts = async (req, res) => {
     }
 };
 
+const updatePost = async (req, res) => {
+  try {
+      const { postId } = req.params;
+      const { caption } = req.body;
+
+      const updatedImage = req.file ? `public/images/${req.file.filename}` : null;
+
+      if (!caption && !updatedImage) {
+          return res.status(400).json({ message: "No updates provided" });
+      }
+
+      const post = await Post.findByIdAndUpdate(
+          postId,
+          {
+              $set: {
+                  ...(caption && { caption }),
+                  ...(updatedImage && { imageUrl: updatedImage })
+              }
+          },
+          { new: true }
+      );
+
+      if (!post) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      return res.status(200).json({ 
+        message: "Post updated successfully",
+        post 
+      });
+
+  } catch (error) {
+      console.log("Error updating post", error);
+      return res.status(500).json({ message: "Failed to update the post" });
+  }
+};
+
 
 const deletePost = async (req, res) => {
   try {
@@ -91,4 +128,4 @@ const deletePost = async (req, res) => {
 
 
 
-export { createPost, getAllPosts, deletePost};
+export { createPost, getAllPosts, deletePost, updatePost};
