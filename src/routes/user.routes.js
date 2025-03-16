@@ -1,4 +1,4 @@
-import { refreshAccessToken, updatePassword, userLogin, userLogout, userRegister } from "../controllers/user.controllers.js";
+import { refreshAccessToken, updatePassword, updateUserDetails, userLogin, userLogout, userRegister } from "../controllers/user.controllers.js";
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { VerifyToken } from "../middleware/auth.middleware.js";
@@ -41,6 +41,7 @@ router.route("/register").post(upload.single("imageUrl"),  async (req, res, next
 
 
 router.route('/login').post(userLogin)
+router.route('/update-user').patch(VerifyToken,updateUserDetails)
 router.route('/logout').post(VerifyToken,userLogout)
 router.route("/accesstoken").get(refreshAccessToken)
 router.route('/update-password').patch(VerifyToken,updatePassword)

@@ -118,6 +118,39 @@ const userLogin = async(req, res) => {
     }
 }
 
+const updateUserDetails = async (req, res) => {
+  try {
+      const {username, email} = req.body
+
+      if(!username || !email) {
+          return res.status(400).json({
+              messagae: 'All fields are required !'
+          })
+      }
+      const user = await User.findByIdAndUpdate(
+          req.user?._id,
+          {
+              $set: {
+                  username,
+                  email
+              }
+          },
+          {
+              new : true
+          }
+      ).select("-password -refreshToken")
+
+      return res.status(200).json({
+          message: "User Updated Successfully"
+      })
+
+  } catch (error) {
+      console.log('error while updating details', error)
+      return res.status(500).json(error)
+  }
+}
+
+
 const updatePassword = async(req,res) => {
     try {
       const {oldpassword, newpassword} = req.body
@@ -238,4 +271,4 @@ const userLogout = async(req, res) => {
         })
     }
 }
-export {userRegister, userLogin, updatePassword, refreshAccessToken, userLogout}
+export {userRegister, userLogin, updateUserDetails ,updatePassword, refreshAccessToken, userLogout}
