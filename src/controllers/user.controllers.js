@@ -150,6 +150,23 @@ const updateUserDetails = async (req, res) => {
   }
 }
 
+const getUser = async (req, res) => {
+    try {
+      res
+        .status(200)
+        .json({
+          data: req.user,
+          message: "User Fetched Data Successfully"
+    })
+    } catch (error) {
+        console.log('error while fetching user',error.message)
+        res.status(500).json({
+            message: error.messsage
+        })
+    }
+}
+
+
 
 const updatePassword = async(req,res) => {
     try {
@@ -271,4 +288,4 @@ const userLogout = async(req, res) => {
         })
     }
 }
-export {userRegister, userLogin, updateUserDetails ,updatePassword, refreshAccessToken, userLogout}
+export {userRegister, userLogin, updateUserDetails ,updatePassword, getUser, refreshAccessToken, userLogout}
