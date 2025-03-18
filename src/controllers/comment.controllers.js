@@ -93,5 +93,37 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const updateComment = async (req, res) => {
+    try {
+      const { commentId } = req.params;
+      const { commentText } = req.body;
+      const userId = req.user?._id;
+  
+      if (!userId) {
+        return res.status(401).json({
+          message: "Unauthorized"
+        });
+      }
+  
+      const comment = await Comment.findById(commentId);
+      if (!comment) {
+        return res.status(404).json({
+          message: "Comment not found"
+        });
+      }
+  
+      comment.comment = commentText; 
+      await comment.save();
+  
+      return res.status(200).json({
+        message: "Comment updated successfully",
+        comment
+      });
+    } catch (error) {
+      console.log("Error updating comment", error);
+      res.status(500).json({ message: "Something went wrong while updating comment" });
+    }
+  };
+  
 
-export { addComment, getCommentsByPost, deleteComment };
+export { addComment, getCommentsByPost, deleteComment, updateComment };

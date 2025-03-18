@@ -94,7 +94,7 @@ const viewLike = async (req, res) => {
       data: likes 
     });
   } catch (error) {
-    console.error("Error retrieving likes", error);
+    console.error("Error retrieving  likes", error);
     res.status(500).json({ message: "Something went wrong while retrieving likes" });
   }
 };
