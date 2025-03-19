@@ -11,4 +11,4 @@ router.route('/all').get(VerifyToken, getAllPosts);
 router.route('/:postId/delete').delete(VerifyToken, deletePost);
 router.route('/:postId/updatepost').patch(VerifyToken, updatePost);
 
-export default router;
+export const postRoutes =  router;

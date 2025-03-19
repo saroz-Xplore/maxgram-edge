@@ -49,5 +49,5 @@ router.route('/update-password').patch(VerifyToken,updatePassword)
 
 
 
-export default router
+export const userRoutes = router
 

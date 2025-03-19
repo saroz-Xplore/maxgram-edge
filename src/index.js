@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from 'dotenv';
 import { DatabaseConnect } from "./db/index.js";
 import cookieParser from 'cookie-parser'
-import userRoutes from "./routes/user.routes.js";
-import postRoutes from "./routes/post.routes.js";
+import {userRoutes} from "./routes/user.routes.js";
+import {postRoutes} from "./routes/post.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import likeRoutes from "./routes/like.routes.js"
 const port = 3000
@@ -32,6 +32,6 @@ app.use('/api/v1/comment', commentRoutes)
 app.use('/api/v1/like', likeRoutes)
 
 app.get('/', (req, res) => {
-    res.send('Hello everyone\', this is instagram home page')
+    res.send('Hello everyone')
 })
 
