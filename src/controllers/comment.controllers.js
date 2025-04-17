@@ -59,6 +59,30 @@ const getCommentsByPost = async (req, res) => {
   }
 };
 
+const getCommentById = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+
+    const comment = await Comment.findById(commentId).populate("user", "username");
+    if (!comment) {
+      return res.status(404).json({ 
+        message: "Comment not found" 
+      });
+    }
+
+    return res.status(200).json({ 
+      message: "Fetched data Succesfully",
+      data: comment 
+    });
+
+  } catch (error) {
+    console.error("Error fetching comment", error);
+    return res.status(500).json({ 
+      message: "Error fetching comment" 
+    });
+  }
+};
+
 const deleteComment = async (req, res) => {
   try {
       const { commentId } = req.params;
@@ -126,4 +150,4 @@ const updateComment = async (req, res) => {
   };
   
 
-export { addComment, getCommentsByPost, deleteComment, updateComment };
+export { addComment, getCommentsByPost, getCommentById, deleteComment, updateComment };
