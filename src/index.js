@@ -18,7 +18,7 @@ DatabaseConnect().then(() => {
         console.log(`Running on http://${hostname}:${port}`);
     })
 }).catch((err) => {
-    console.log("Error while connecting", err);
+    console.log("Error connecting", err);
 })
 
 app.use(cookieParser())
